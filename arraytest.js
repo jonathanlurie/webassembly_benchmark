@@ -1,17 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>WASM Demo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-
-    <h1>WASM Demo</h1>
-
-    <script src="array.js"></script>
-    <script>
 
     // compiled with
     // em++ array.cpp -o array.js -Oz -s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -g
@@ -22,15 +8,6 @@
 
 
     function onRuntimeInitialized() {
-
-      // converts a JS typed array into a webass compatible heap
-      function _arrayToHeap(typedArray){
-        let numBytes = typedArray.length * typedArray.BYTES_PER_ELEMENT;
-        let ptr = Module._malloc(numBytes);
-        let heapBytes = new Uint8Array(Module.HEAPU8.buffer, ptr, numBytes);
-        heapBytes.set(new Uint8Array(typedArray.buffer));
-        return heapBytes;
-      }
 
       function _getHeapSpace(arrayType, length) {
         let numBytes = length * arrayType.BYTES_PER_ELEMENT;
@@ -52,25 +29,7 @@
       // console.log(Module._getArrayValue(12));
       // console.log(Module._getArrayValue(13));
 
-      /*
-      // this part is about sending whole arrays to wasm, following
-      // https://github.com/Planeshifter/emscripten-examples/tree/master/01_PassingArrays
-      let numberArray = new Float32Array(10e7);
-      Module._allocateArray(10e7);
-      for (let i=0; i<numberArray.length; i++) {
-        //numberArray[i] = Math.random() * 100;
-        Module._setArrayValue(i, Math.random() * 100)
-      }
 
-
-      // compute stuff by sending an array on wasm
-      let heapBytes = _arrayToHeap(numberArray);
-      let t0WASM= performance.now()
-      let ret = Module._sum(heapBytes.byteOffset, numberArray.length);
-      let t1WASM = performance.now()
-      console.log("wasm", t1WASM - t0WASM, "ms");
-      console.log(ret);
-      */
 
       /*
       // Comparing summing on WASM and summing on JS: comparable.
@@ -97,18 +56,14 @@
       console.log("sumJS:", sumJS);
       */
 
-      /*
+
       // Call a webass method that returns a pointer to an allocated array, and get this array in JS
       let sizeOfArrayToCreate = 10;
       let pointer = Module._getArray(sizeOfArrayToCreate); // returns float*
       let returnedData = _heapToArray(Float32Array, pointer, sizeOfArrayToCreate)
       console.log(returnedData)
-      */
+
 
 
 
     }
-
-    </script>
-</body>
-</html>

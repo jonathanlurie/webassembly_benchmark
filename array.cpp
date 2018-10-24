@@ -38,13 +38,15 @@ extern "C" {
   float EMSCRIPTEN_KEEPALIVE getArrayValue(int index) { return arr[index]; }
 
 
-  double EMSCRIPTEN_KEEPALIVE sum(float *arr, long length){
+  double EMSCRIPTEN_KEEPALIVE sum(float *array, long length){
     double ret = 0;
     for (long i = 0; i < length; i++){
-      ret += arr[i];
+      ret += array[i];
     }
     return ret;
   }
+
+
 
 
   float * EMSCRIPTEN_KEEPALIVE getArray(long length) {
